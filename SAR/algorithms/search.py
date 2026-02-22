@@ -37,6 +37,28 @@ def breadthFirstSearch(problem: SearchProblem):
     Search the shallowest nodes in the search tree first.
     """
     # TODO: Add your code here
+    frontera = utils.Queue()
+    estado_inicial = problem.getStartState()
+    frontera.push((estado_inicial, []))
+    visitados = set()
+    while not frontera.isEmpty():
+        estado, acciones = frontera.pop()
+
+        if problem.isGoalState(estado):
+            return acciones
+
+        if estado not in visitados:
+            visitados.add(estado)
+
+            # Desempaquetamos igual que en tu UCS: (sucesor, accion, costo_paso)
+            for sucesor, accion, costo_paso in problem.getSuccessors(estado):
+                if sucesor not in visitados:
+                    # No sumamos costos, solo acumulamos las acciones
+                    nueva_ruta = acciones + [accion]
+                    frontera.push((sucesor, nueva_ruta))
+
+    return []
+
     utils.raiseNotDefined()
 
 
