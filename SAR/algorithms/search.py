@@ -44,8 +44,25 @@ def uniformCostSearch(problem: SearchProblem):
     """
     Search the node of least total cost first.
     """
+    frontera = utils.PriorityQueue()
+    estado_inicial = problem.getStartState()
 
-    # TODO: Add your code here
+    frontera.push((estado_inicial, [], 0), 0)
+    mejor_costo = {estado_inicial: 0}
+
+    while not frontera.isEmpty():
+        estado, acciones, costo = frontera.pop()
+        if costo > mejor_costo.get(estado, float("inf")):
+            continue
+        if problem.isGoalState(estado):
+            return acciones
+        for sucesor, accion, costo_paso in problem.getSuccessors(estado):
+            nuevo_costo = costo + costo_paso
+
+            if nuevo_costo < mejor_costo.get(sucesor, float("inf")):
+                mejor_costo[sucesor] = nuevo_costo
+                frontera.push((sucesor, acciones + [accion], nuevo_costo), nuevo_costo)
+    return []
     utils.raiseNotDefined()
 
 
